@@ -30,7 +30,7 @@ add_action('wp_loaded', function(){
                                                                                                 'value' => '.type-page',
                                                                                                 );
             $wrapper_elements['page'] = array(
-                                                'title' => $post_type,
+                                                'title' => 'page',
                                                 'value' => '.type-page'
                                                 );
         }
