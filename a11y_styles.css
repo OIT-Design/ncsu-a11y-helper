@@ -1,98 +1,167 @@
-#no-issues-detected {
+.a11y-sr-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	-webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+	border: 0;
+}
+
+.a11y-dialog {
+	font-family: arial, sans-serif;
+}
+
+/* -------------------------------------------------------------------------- *\
+ * Necessary styling for the dialog to work
+ * -------------------------------------------------------------------------- */
+
+.a11y-dialog[aria-hidden="true"] {
+  display: none;
+}
+
+/* -------------------------------------------------------------------------- *\
+ * Styling to make the dialog look like a dialog
+ * -------------------------------------------------------------------------- */
+
+.a11y-dialog-overlay {
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.66);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.a11y-dialog-content {
+  background-color: rgb(255, 255, 255);
+  z-index: 100;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.a11y-dialog-content p.a11y-summary {
+	white-space: pre-line;
+}
+
+/* -------------------------------------------------------------------------- *\
+ * Extra dialog styling to make it shiny
+ * -------------------------------------------------------------------------- */
+
+.a11y-dialog a {
+	text-decoration: underline;
+}
+
+.a11y-dialog-content {
+  padding: 1em;
+  max-width: 90%;
+  width: 1200px;
+  max-height: 90%;
+  border-radius: 2px;
+  overflow-y: scroll;
+}
+
+@media screen and (min-width: 980px) {
+	.a11y-test-content {
+		display: grid;
+		grid-template-columns: 50% 50%;
+	}
+}
+
+.a11y-test-info, .a11y-test-html {
+	padding: 2rem;
+}
+
+.a11y-html-code {
+	background: #f2f2f2;
+	padding: 1.5rem;
+}
+
+.a11y-html-code code {
+	background-color: #f2f2f2;
+	font-family: monospace;
+	white-space: normal;
+}
+
+@media screen and (min-width: 700px) {
+  .a11y-dialog-content {
+    padding: 2em;
+  }
+
+}
+
+.a11y-dialog-overlay {
+  background-color: rgba(43, 46, 56, 0.9);
+}
+
+.a11y-dialog h1 {
+  margin: 0;
+  font-size: 1.25em;
+}
+
+.a11y-dialog h2 {
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.a11y-dialog p {
+	margin: 0 0 1rem 0;
+}
+
+.a11y-dialog-close {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  border: 0;
+  padding: 0.5em;
+  background-color: #cc0000;
+  font-weight: bold;
+  font-size: 1.25em;
+  line-height: 1em;
+  width: auto;
+  height: auto;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.15s;
+  color: #fff;
+}
+
+.a11y-dialog-close:hover, .a11y-dialog-close:focus, .a11y-dialog-close:active {
+	background-color: #990000;
+}
+
+@media screen and (min-width: 700px) {
+  .a11y-dialog-close {
+    top: 1em;
+    right: 1em;
+  }
+}
+
+/* Annotated Preview */
+
+.a11y-more-button {
+	font-size: 1em;
+	text-transform: uppercase;
+	padding: 0.5rem 1rem;
+	background-color: #427E93;
+	color: #fff;
 	width: 100%;
-	margin-bottom: 1rem;
-	/*display: none;*/
+	margin: 0.5rem 0;
+	border: none;
 }
 
-#issues-detected {
-	width: 100%;
-	margin-bottom: 1rem;
-/*	display: none; */
-}
-
-#annotated-preview {
-
-}
-
-#annotated-content {
-	width: 65%;
-/*	zoom: 0.75;
-	-moz-transform: scale(0.75);*/
-	display: relative;
-	margin: 1rem 0;
-	padding: 1rem 1rem 1rem 1rem;
-	border-top: solid 1px #ccc;
-	border-left: none;
-	border-right: none;
-	border-bottom: solid 1px #ccc;
-	padding-right: 1rem;
-	background: #fff;
-	color: #000;
-	font-size: 0.8em;
-}
-
-#annotated-content h6 {
-	font-size: 1.1em;
-	line-height: 1.2em;
-	margin: 0.5em 0;
-	padding: 0;
-	font-weight: normal;
-	color: #000;
-}
-
-#annotated-content h5 {
-	font-size: 1.2em;
-	line-height: 1.3em;
-	margin: 0.5em 0;
-	padding: 0;
-	font-weight: normal;
-	color: #000;
-}
-
-#annotated-content h4 {
-	font-size: 1.3em;
-	line-height: 1.4em;
-	margin: 0.5em 0;
-	padding: 0;
-	font-weight: normal;
-	color: #000;
-}
-
-#annotated-content h3 {
-	font-size: 1.4em;
-	line-height: 1.5em;
-	margin: 0.5em 0;
-	padding: 0;
-	font-weight: normal;
-	color: #000;
-}
-
-#annotated-content h2 {
-	font-size: 1.5em;
-	line-height: 1.6em;
-	margin: 0.5em 0;
-	padding: 0;
-	font-weight: normal;
-	color: #000;
-}
-
-#annotated-content h1 {
-	font-size: 1.6em;
-	line-height: 1.7em;
-	margin: 0.5em 0;
-	padding: 0;
-	font-weight: normal;
-	color: #000;
-}
-
-#annotated-content p {
-	font-size: 1.25em;
-}
-
-#annotated-content img, #annotated-content iframe {
-	margin: 0.25rem;
-	max-width: 98%;
-	height: auto;
+.a11y-more-button:hover, .a11y-more-button:focus, .a11y-more-button:active {
+	background-color: #326070;
 }
 
 .a11y-indicator {
@@ -105,7 +174,7 @@
 
 /* Info: Indicates additional best practice not tested by aXe that we want to draw attention to */
 .a11y-info {
-	outline: 0.25rem solid steelblue;
+	outline: 0.25em solid steelblue;
 	display: inline-block;
 }
 
@@ -118,7 +187,7 @@
 		}
 
 .a11y-minor {
-	outline: 0.25rem solid gold;
+	outline: 0.25em solid gold;
 	display: inline-block;
 }
 
@@ -131,7 +200,7 @@
 		}
 
 .a11y-moderate, .a11y-null {
-	outline: 0.25rem solid orange;
+	outline: 0.25em solid orange;
 	display: inline-block;
 }
 
@@ -144,7 +213,7 @@
 		}
 
 .a11y-serious {
-	outline: 0.25rem solid coral;
+	outline: 0.25em solid coral;
 	display: inline-block;
 }
 
@@ -157,7 +226,7 @@
 		}
 
 .a11y-critical {
-	outline: 0.25rem solid red;
+	outline: 0.25em solid red;
 	display: inline-block;
 }
 
@@ -170,46 +239,72 @@
 		}
 
 .a11y-issue {
-	padding: 0.25rem;
+	padding: 0.25em;
+	position: relative;
 }
 
-.a11y-issue:hover, .a11y-issue:focus, .a11y-issue:active {
+/*.a11y-issue:hover, .a11y-issue:focus, .a11y-issue:active {
 	background-color: yellow !important;
-}
+}*/
 
 .a11y-annotation {
 	position: absolute;
-	right: 1rem;
+	left: 50%;
+	margin-left: -7.5em;
+	/*top: -8.5rem;*/
+	bottom: 100%;
+	margin-bottom: 0.5rem;
 	display: block;
-	max-width: 25%;
-	border-radius: 0.25rem;
-	padding: 0.5rem;
+	/*max-width: 50%;*/
+	width: 15em;
+	height: auto;
+	/*border-radius: 0.25rem; */
+	padding: 0.5em;
 /*	color: #333; 
 	text-decoration: none; */
 	background-color: #fff;
-	font-size: 0.8rem;
+	font-size: 1em;
 	font-weight: 400;
-	line-height: 1.1rem;
+	line-height: 1.3em;
 	text-decoration: none;
-	box-shadow: 0px 0px 5px #ccc;
-	border: solid 1px #f2f2f2;
+	/*box-shadow: 0px 0px 5px #666;*/
+	border: solid 1px #ccc;
+	background: #333;
+	color: #fff;
+	font-family: arial, sans-serif;
+	letter-spacing: 1px;
 }
 
-.a11y-annotation .a11y-impact {
+.a11y-annotation:before {
+	border-top: 1em solid #333;
+    border-left: 1em solid transparent;
+    border-right: 1em solid transparent;
+    content: '';
+    right: 6.5em;
+    bottom: -1em;
+    position: absolute;
+/*    transform: translateX(-50%);
+    -wekbkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);*/
+}
+
+.a11y-impact {
 	text-transform: capitalize;
-	color: #000;
 }
 
 .a11y-annotation .a11y-help {
-	text-decoration: underline;
+	display: block;
+	margin-left: 1.5em;
 }
 
-.a11y-annotation:hover, .a11y-annotation:focus, .a11y-annotation:active, .a11y-issue:hover .a11y-annotation {
+/*.a11y-annotation:hover, .a11y-annotation:focus, .a11y-annotation:active, .a11y-issue:hover .a11y-annotation {
 	background-color: yellow;
 	color: #000;
 	z-index: 1000;
 	box-shadow: 0px 0px 5px #ccc;
-}
+}*/
 
 .a11y-annotation .a11y-annotation {
 	margin-top: 3em;
