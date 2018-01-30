@@ -72,13 +72,45 @@ $additional_tests_meta = array(
         "helpUrl" => "https://accessibility.oit.ncsu.edu/it-accessibility-at-nc-state/developers/accessibility-handbook/tables/",
         "nodes" => array(
             0 => array(
-                "failureSummary" => "Double-check your table and verify that it is being used to communicate tabular information. If it is being used for layout, find another way to organize content that doesn't use tables. For assistance, contact a site administrator or the NC State Help Desk (help@ncsu.edu).",
+                "failureSummary" => "Double-check your table and verify that it is being used to communicate tabular information. If it is being used for layout, find another way to organize content that doesn't use tables.",
                 "target" => array(
                     0 => null,
                 )
             )
         ),
         "description" => "Tables should be used for displaying data or otherwise communicating information that can be sorted into labeled rows and columns. Tables should not be used for layout or aesthetic purposes.",
+        "html" => null,
+    ),
+    "ncsu_captcha" => array(
+        "id" => "ncsu_captcha",
+        "impact" => "info",
+        "help" => "CAPTCHAs can be an accessibility barrier. Avoid using them whenever possible.",
+        "helpUrl" => "http://accessibility.psu.edu/captcha/",
+        "nodes" => array(
+            0 => array(
+                "failureSummary" => "This CAPTCHA has likely been added by a plugin. Check the plugin options (or ask a site administrator to do so) to see if there is an alternative to using a CAPTCHA.",
+                "target" => array(
+                    0 => null,
+                )
+            )
+        ),
+        "description" => "While some CAPTCHAs can be made accessible, many present a barrier for users with disabilities and create a poor user experience in general. Consider alternatives to CAPTCHAs whenever possible.",
+        "html" => null,
+    ),
+    "ncsu_ambiguous_link" => array(
+        "id" => "ncsu_ambiguous_link",
+        "impact" => "info",
+        "help" => "Make sure your link text is unambiguous and makes sense out of context.",
+        "helpUrl" => "https://www.wuhcag.com/link-purpose-link-only/",
+        "nodes" => array(
+            0 => array(
+                "failureSummary" => "Our scan has detected words often associated with ambiguous link text, eg. 'click here' or 'download now.' When phrases like those are the only words in the link, the meaning of the link is unclear. Double-check your link text and avoid these kinds of link phrasings. For example, 'Click here to view examples of our work' (with 'click here' as the link and 'to view examples of our work' as context) could be rewritten simply as 'View examples of our work' (with the entire phrase as part of the link).",
+                "target" => array(
+                    0 => null,
+                )
+            )
+        ),
+        "description" => "Some screen reader users scan a web page by skipping between links, and the text of each link is announced without the context of the paragraph around it. The text of the link should be unambiguous and should clearly indicate its destination or its purpose.",
         "html" => null,
     )
 );

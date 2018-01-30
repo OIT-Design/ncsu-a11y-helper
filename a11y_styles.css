@@ -1,3 +1,10 @@
+.a11y-report-generator button {
+	background: none;
+	border: none;
+	color: #eee;
+	padding: 0 8px 0 7px !important;
+}
+
 .a11y-sr-text {
 	position: absolute;
 	width: 1px;
@@ -76,6 +83,24 @@
 	}
 }
 
+#a11y-report-content {
+	padding: 1em 0;
+	font-size: 0.9em;
+}
+
+#a11y-report-content li:before {
+	display: none;
+}
+
+#a11y-report-content li.a11y-report-entry {
+	list-style: none;
+	padding: 1em;
+}
+
+#a11y-report-content li.a11y-report-entry:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
 .a11y-test-info, .a11y-test-html {
 	padding: 2rem;
 }
@@ -147,6 +172,10 @@
   }
 }
 
+.a11y-dialog-footer {
+	font-size: 0.8em;
+}
+
 /* Annotated Preview */
 
 .a11y-more-button {
@@ -166,10 +195,10 @@
 
 .a11y-indicator {
 	display: inline-block;
-	width: 1em;
-	height: 1em;
+	width: 1em !important;
+	height: 1em !important;
 	border-radius: 50%;
-	margin: 0 0.5rem 0 0;
+	margin: 0 0.5rem 0 0 !important;
 }
 
 /* Info: Indicates additional best practice not tested by aXe that we want to draw attention to */
@@ -243,6 +272,10 @@
 	position: relative;
 }
 
+.a11y-annotation:focus-within, .a11y-annotation:hover {
+	z-index: 99;
+}
+
 /*.a11y-issue:hover, .a11y-issue:focus, .a11y-issue:active {
 	background-color: yellow !important;
 }*/
@@ -250,13 +283,13 @@
 .a11y-annotation {
 	position: absolute;
 	left: 50%;
-	margin-left: -7.5em;
+	margin-left: -8.5em;
 	/*top: -8.5rem;*/
 	bottom: 100%;
 	margin-bottom: 0.5rem;
 	display: block;
 	/*max-width: 50%;*/
-	width: 15em;
+	width: 18em;
 	height: auto;
 	/*border-radius: 0.25rem; */
 	padding: 0.5em;
@@ -280,7 +313,7 @@
     border-left: 1em solid transparent;
     border-right: 1em solid transparent;
     content: '';
-    right: 6.5em;
+    right: 8em;
     bottom: -1em;
     position: absolute;
 /*    transform: translateX(-50%);
@@ -296,6 +329,7 @@
 
 .a11y-annotation .a11y-help {
 	display: block;
+	width: 90% !important;
 	margin-left: 1.5em;
 }
 

@@ -17,7 +17,7 @@ function ncsu_a11y_run_button($post) {
             '<div class="misc-pub-section"><a class="preview button" href="%s" target="wp-preview-1" id="ncsu-a11y-preview">%s</a><br /></div><a class="misc-pub-section preview" href="#ncsu_a11y">%s</a>',
             get_preview_post_link( $post, array( 'ncsu_a11y' => 'true' ) ),
             'Run Accessibility Check<span class="screen-reader-text"> (opens in a new window)</span>',
-            'More about <strong>Accessibility at NC State</strong>'
+            'Learn more about accessibility'
             );
         
     }

@@ -1,10 +1,9 @@
-=== NC State Accessibility Helper (beta) ===
-Contributors: OIT Design
+=== NC State Accessibility Helper ===
+Contributors: OIT Design & Web Services, NC State University
 Donate link: https://design.oit.ncsu.edu/
 Tags: accessibility
 Requires at least: 3.0.1
-Tested up to: 4.8
-Stable tag: 4.8
+Tested up to: 4.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -16,7 +15,7 @@ Wouldn't it be great if content creators caught and fixed their accessibility is
 
 The **NC State Accessibility Helper** tests your content and generates an annotated preview inside of WordPress. In the annotated preview, detected accessibility issues are highlighted, and the annotation describes the detected issue and links to a documentation resource where you can learn more about the issue and how to avoid it.
 
-[Contributions and collaboration are welcome!](https://github.ncsu.edu/oitdesign/ncsu-a11y-helper)
+[Contributions and collaboration are welcome!](https://github.com/briandeconinck/ncsu-a11y-helper)
 
 = How It Works =
 
@@ -47,17 +46,17 @@ We have replaced all of the documentation links provided by aXe with NC State Go
  
 == Installation ==
  
-This plugin is available to campus through Cthulhu.
- 
-== Frequently Asked Questions ==
- 
-FAQ to come
- 
-== Screenshots ==
- 
-Screenshots to come
+This plugin is available to NC State through Cthulhu. (Not sure what that means? Contact the Help Desk for more information.) 
+
+Off-campus users can install the plugin via a [public GitHub repository](https://github.com/briandeconinck/ncsu-a11y-helper) using Andy Fragen's [GitHub Updater plugin](https://github.com/afragen/github-updater).
  
 == Changelog ==
+
+= 1.0.0 =
+* Major revisions, now stable enough for a 1.0 tag
+* Add additional custom tests
+* Make helper text more generic, less NC State-y
+* Resolves some accessibility issues in the plugin itself
 
 = 0.2.0 =
 * Major revisions
@@ -69,6 +68,9 @@ Screenshots to come
 * Initial release to campus
  
 == Upgrade Notice ==
+
+= 1.0.0 =
+General improvements, plugin now more stable
 
 = 0.2.0 =
 Almost complete rewrite of the plugin

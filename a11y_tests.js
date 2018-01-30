@@ -230,10 +230,95 @@
 				        }
 				    );
 
+				// Check for ReCAPTCHAs
+					// Reminder: Don't use CAPTCHAs
+
+					$(custom_options.wrapper).find('iframe').each(
+						function(){
+
+							var iframe_src = $(this).attr('src');
+							var recaptcha_src = 'https://www.google.com/recaptcha/';
+
+							// ReCAPTCHA
+
+							if(iframe_src.indexOf(recaptcha_src) != -1){
+
+					       		var test = 'ncsu_captcha';
+					        	var test_msg = $.extend(true, {}, my_additional_tests[test]);
+
+						        $(this).addClass(test + '-' + i);
+					        	failed_tests[i] = test_msg;
+					        	failed_tests[i]['nodes'][0]['target'][0] = '.' + test + '-' + i;
+					        	failed_tests[i]['nodes'][0]['html'] = $(this)[0]['outerHTML'];
+								i = i + 1;
+
+							}
+							 	
+				        }
+				    );
+
+				// Check for Really Simple CAPTCHA
+					// Reminder: Don't use CAPTCHAs
+
+					$(custom_options.wrapper).find('img').each(
+						function(){
+
+							var img_alt = $(this).attr('alt');
+
+							// Really Simple CAPTCHA
+
+							if(img_alt == 'captcha'){
+
+					       		var test = 'ncsu_captcha';
+					        	var test_msg = $.extend(true, {}, my_additional_tests[test]);
+
+						        $(this).addClass(test + '-' + i);
+					        	failed_tests[i] = test_msg;
+					        	failed_tests[i]['nodes'][0]['target'][0] = '.' + test + '-' + i;
+					        	failed_tests[i]['nodes'][0]['html'] = $(this)[0]['outerHTML'];
+								i = i + 1;
+
+							}
+							 	
+				        }
+				    );
+
+				// Check for common ambiguous links
+
+					$(custom_options.wrapper).find('a').each(
+						function(){
+
+							var link_contents = $(this).text().toUpperCase();
+							var here = 'here'.toUpperCase();
+							var click = 'click'.toUpperCase();
+							var more = 'more'.toUpperCase();
+							var download = 'download'.toUpperCase();
+							var read = 'read'.toUpperCase();
+							var ambiguous_text_detected = 0;
+
+							if(link_contents.indexOf(here) != -1 || link_contents.indexOf(click) != -1 || link_contents.indexOf(more) != -1 || link_contents.indexOf(download) != -1 || link_contents.indexOf(read) != -1){
+								ambiguous_text_detected = 1;
+							}
+
+							if(ambiguous_text_detected == 1){
+								var test = 'ncsu_ambiguous_link';
+					        	var test_msg = $.extend(true, {}, my_additional_tests[test]);
+
+						        $(this).addClass(test + '-' + i);
+					        	failed_tests[i] = test_msg;
+					        	failed_tests[i]['nodes'][0]['target'][0] = '.' + test + '-' + i;
+					        	failed_tests[i]['nodes'][0]['html'] = $(this)[0]['outerHTML'];
+								i = i + 1;
+							}	
+				        }
+				    );
+
 		return failed_tests;
 	}
 
 	var additional_test_violations = additional_tests();
+
+	
 
 	// Generate the annotated preview
 	function generate_annotated_preview(err, results) {
@@ -243,7 +328,42 @@
 		var violations = $.merge(results['violations'], results['incomplete']);
 		violations = $.merge(violations, additional_test_violations);
 
-		console.log(violations);
+		// console.log(violations);
+
+		// Add summary report to the end of the wrapper
+		var report = `<div class="a11y-dialog" aria-hidden="true" id="a11y-report" style="border: solid 1px red; margin: 2rem; padding: 2rem;">
+						<div class="a11y-dialog-overlay" tabindex="-1" data-a11y-dialog-hide></div>
+						<div class="a11y-dialog-content" aria-labelledby="dialogTitle" aria-describedby="a11y-desc-report" role="dialog">
+						<div role="document">
+							<button data-a11y-dialog-hide class="a11y-dialog-close" aria-label="Close this dialog window">&times;</button>
+
+							<div id="a11y-desc-report" class="a11y-sr-text">Beginning of dialog window. It begins with a heading 1 called "Detected Accessibility Issues". Escape will cancel and close the window.</div>
+
+								<h1 id="a11y-title-report">Detected Accessibility Issues</h1>
+
+								<ul id="a11y-report-content">
+
+								</ul>
+
+								<div class="a11y-dialog-footer" role="footer">
+									<p><em>Accessibility testing powered by <a href="https://axe-core.org/">aXe-core, by Deque Systems</a>, with additional tests by <a href="https://design.oit.ncsu.edu/docs/a11y-helper">NC State University's OIT Design & Web Services team</a>.</em></p>
+								</div>
+							          
+							</div>
+						</div>
+					</div>`;
+
+		$(custom_options.wrapper).append(report);
+
+		// Add button in admin toolbar to open report modal
+		var generate_button = '<li id="wp-admin-bar-a11y-generate-report" class="a11y-report-generator"><button data-a11y-dialog-show="a11y-report" class="ab-item"><span class="dashicons dashicons-universal-access-alt"></span> Accessibility Report</button>		</li>';
+
+		$('#wp-admin-bar-root-default').append(generate_button);
+
+		// Add JS for modal dialog
+		var dialogEl_x = document.getElementById('a11y-report');
+		var mainEl_x = $(custom_options.wrapper);
+		var dialog_x = new window.A11yDialog(dialogEl_x, mainEl_x);
 
 		// For each violation...
 		$.each(violations, function( i, violation ) {
@@ -270,7 +390,7 @@
 								+ '<span class="a11y-indicator a11y-' + impact + '-indicator" aria-hidden="true"></span>'
 								+ '<strong class="a11y-impact">' + impact + ':</strong> '
 								+ '<span class="a11y-help">' + escapeHtml(help) + '</span>'
-								+ '<button class="a11y-more-button" data-a11y-dialog-show="a11y-more-' + i + '">Learn More<span class="a11y-sr-text"> about the issue: "' + escapeHtml + '"</span></button>' 
+								+ '<button class="a11y-more-button" data-a11y-dialog-show="a11y-more-' + i + '">Learn More<span class="a11y-sr-text"> about the issue: "' + escapeHtml(help) + '"</span></button>' 
 								+ '</div>';
 
 			// Build modal dialog
@@ -297,9 +417,6 @@
 									          <h2>Recommended Action</h2>
 									          <p class="a11y-summary">` + escapeHtml(summary) + `</p>
 
-									          <h2>Need Help?</h2>
-									          <p>Not sure how to fix this? <a href="mailto:oit_wordpress@help.ncsu.edu?subject=NC State Accessibility Helper - ` + help + `">Contact the NC State Help Desk</a> for assistance from OIT's WordPress team. Be sure to include a link to the post or page you're working on.</p>
-
 									      </div>
 
 								          <div class="a11y-test-html">
@@ -314,13 +431,26 @@
 								      </div>
 
 								      <div class="a11y-dialog-footer" role="footer">
-								      	<p><em>Accessibility testing powered by <a href="https://axe-core.org/">aXe-core, by Deque Systems</a>, and <a href="https://design.oit.ncsu.edu/docs/a11y-helper">OIT Design</a>.</em></p>
+								      	<p><em>Accessibility testing powered by <a href="https://axe-core.org/">aXe-core, by Deque Systems</a>, with additional tests by <a href="https://design.oit.ncsu.edu/docs/a11y-helper">NC State University's OIT Design & Web Services team</a>.</em></p>
 								      </div>
 							          
 							        </div>
 							      </div>
 							    </div>
 			`;
+
+			// Build report entry
+			var entry = `
+							<li class="a11y-report-entry">
+								<ul>
+									<li><strong>Issue:</strong> <a href="` + escapeHtml(helpurl) + `">` + escapeHtml(help) + `</a></li>
+									<li><strong>Code:</strong> <code>` + escapeHtml(html) + `</code></strong>
+									<li><strong>Impact:</strong> <span class="a11y-indicator a11y-` + impact + `-indicator" aria-hidden="true"></span><span class="a11y-impact">` + impact + `</span></li>
+									<li><strong>Description:</strong> ` + escapeHtml(description) + `</span></li>
+									<li><strong>Recommended Action:</strong> <span class="a11y-summary">` + escapeHtml(summary) + `</span></li>
+								</ul>
+							</li>
+						`;
 
 			// Highlight the detected issue
 			$.each(violation['nodes'], function( j, instance ) {
@@ -342,6 +472,9 @@
 
 			// Add modal dialog with issue details
 			$(custom_options.wrapper).append(my_dialog);
+
+			// Report Entries
+			$('#a11y-report-content').append(entry);
 
 			// Add JS for modal dialog
 			var dialogEl = document.getElementById('a11y-more-' + i);

@@ -1,10 +1,12 @@
 <?php
 /**
  * Plugin Name: NC State Accessibility Helper
- * Description: Checks for common accessibility issues users may have when creating content in the Visual Editor, and highlights them in an annotated preview
- * Version: 0.2.0
- * Author: OIT Design
- * Author URI: https://design.oit.ncsu.edu
+ * Description: Checks for common accessibility issues users introduce when creating content in WordPress, and highlights them in an annotated preview
+ * Version: 1.0.0
+ * Author: OIT Design & Web Services
+ * Author URI: https://design.oit.ncsu.edu/
+ *
+ * GitHub Plugin URI: briandeconinck/ncsu-a11y-helper
  *
  */
 
@@ -72,7 +74,7 @@ function ncsu_a11y_helper__scripts_front( $hook ) {
 
     if ( is_preview() && get_query_var('ncsu_a11y') == 'true' ) {
         // aXe: https://github.com/dequelabs/axe-core and https://www.deque.com/products/axe/
-        wp_register_script( 'axe-core', 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/2.4.1/axe.min.js', array(), null, true  );
+        wp_register_script( 'axe-core', 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/2.6.1/axe.min.js', array(), null, true  );
         wp_enqueue_script( 'axe-core' );
 
         // Script to run aXe tests and generate annotated preview
@@ -94,4 +96,5 @@ function ncsu_a11y_helper__scripts_front( $hook ) {
         
 }
 add_action( 'wp_enqueue_scripts', 'ncsu_a11y_helper__scripts_front' );
+
 
