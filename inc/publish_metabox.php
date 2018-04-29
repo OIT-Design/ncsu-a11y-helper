@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // Add "Run Accessibility Scan" button to Publish metabox
 function ncsu_a11y_run_button($post) {
@@ -6,7 +6,7 @@ function ncsu_a11y_run_button($post) {
     $ncsu_a11y_options = get_option( 'ncsu_a11y', array() );
     $current_screen = get_current_screen()->id;
 
-    if ( $ncsu_a11y_options['post_types'] ) {
+    if ( isset( $ncsu_a11y_options['post_types'] ) ) {
         $checked_post_types = $ncsu_a11y_options['post_types'];
     } else {
         $checked_post_types = get_post_types( array( 'public' => true ) );
@@ -19,7 +19,7 @@ function ncsu_a11y_run_button($post) {
             'Run Accessibility Check<span class="screen-reader-text"> (opens in a new window)</span>',
             'Learn more about accessibility'
             );
-        
+
     }
 
 }

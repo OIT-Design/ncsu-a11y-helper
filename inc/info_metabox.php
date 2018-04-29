@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // Add "Accessibility at NC State metabox"
 
@@ -6,7 +6,7 @@ function ncsu_a11y_meta_box() {
 
     $ncsu_a11y_options = get_option( 'ncsu_a11y', array() );
 
-    if ( $ncsu_a11y_options['post_types'] ) {
+    if ( isset( $ncsu_a11y_options['post_types'] ) ) {
         $checked_post_types = $ncsu_a11y_options['post_types'];
     } else {
         $checked_post_types = get_post_types( array( 'public' => true ) );
@@ -17,6 +17,8 @@ function ncsu_a11y_meta_box() {
 add_action( 'add_meta_boxes', 'ncsu_a11y_meta_box' );
 
 function ncsu_a11y_meta_content() {
+
+    global $post;
 
     $default_meta_text = '<h3>' . __( 'What is Web Accessibility?', 'ncsu-a11y-helper' ) . '</h3>'
                          .'<p><a href="http://go.ncsu.edu/what-is-a11y">' . __( 'Web accessibility', 'ncsu-a11y-helper' ) . '</a> '
