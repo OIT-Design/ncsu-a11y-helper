@@ -10,8 +10,8 @@
  *
  */
 
-define( __NCSU_A11Y_HELPER_PATH__, plugin_dir_path(__FILE__) );
-define( __NCSU_A11Y_HELPER_URL__, plugins_url(__FILE__) );
+define( '__NCSU_A11Y_HELPER_PATH__', plugin_dir_path(__FILE__) );
+define( '__NCSU_A11Y_HELPER_URL__', plugins_url(__FILE__) );
 
 // Misc useful functions
 require_once( plugin_dir_path(__FILE__) . '/inc/misc.php' );
@@ -60,7 +60,7 @@ function ncsu_a11y_helper__scripts_front( $hook ) {
         $my_template = ( get_page_template_slug($post_id) ) ? preg_replace('/\\.[^.\\s]{3,4}$/', '', get_page_template_slug($post_id) ) : 'page' ;
 
         $my_wrapper = ( $ncsu_a11y_options[str_replace( '-', '_', $my_template )] ) ? $ncsu_a11y_options[str_replace( '-', '_', $my_template )] : '.type-page';
-        
+
     } else {
         $my_wrapper = ( $ncsu_a11y_options[$post_type] ) ? $ncsu_a11y_options[$post_type] : '.' . $post_type;
     }
@@ -93,7 +93,7 @@ function ncsu_a11y_helper__scripts_front( $hook ) {
         wp_enqueue_style( 'a11y_styles' );
 
     }
-        
+
 }
 add_action( 'wp_enqueue_scripts', 'ncsu_a11y_helper__scripts_front' );
 
