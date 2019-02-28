@@ -10,8 +10,8 @@
  *
  */
 
-define( __NCSU_A11Y_HELPER_PATH__, plugin_dir_path(__FILE__) );
-define( __NCSU_A11Y_HELPER_URL__, plugins_url(__FILE__) );
+define( '__NCSU_A11Y_HELPER_PATH__', plugin_dir_path(__FILE__) );
+define( '__NCSU_A11Y_HELPER_URL__', plugins_url(__FILE__) );
 
 // Misc useful functions
 require_once( plugin_dir_path(__FILE__) . '/inc/misc.php' );
@@ -20,6 +20,7 @@ require_once( plugin_dir_path(__FILE__) . '/inc/misc.php' );
 require_once('vendor/RationalOptionPages/RationalOptionPages.php');
 
 // Create plugin options
+require_once( plugin_dir_path(__FILE__) . '/inc/multisite_options.php' );
 require_once( plugin_dir_path(__FILE__) . '/inc/options.php' );
 
 // Add "Run Accessibility Check" button to the publish meta box
@@ -27,6 +28,27 @@ require_once( plugin_dir_path(__FILE__) . '/inc/publish_metabox.php' );
 
 // Add the info meta box
 require_once( plugin_dir_path(__FILE__) . '/inc/info_metabox.php' );
+
+// Add "Accessibility Check" link to admin toolbar
+function ncsu_a11y_toolbar_link( $wp_admin_bar ) {
+
+    if ( is_single() || is_page() ) {
+
+        $current_url = '//' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+        $args = array(
+            'id' => 'ncsu-a11y--run-check',
+            'title' => 'Run Accessibility Check',
+            'href' => add_query_arg( 'ncsu_a11y', 'true', $current_url ) . '#a11y-report',
+            'meta' => array(
+                'class' => 'ncsu-a11y--admin-bar',
+            )
+        );
+        $wp_admin_bar -> add_node($args);
+    }
+
+}
+add_action( 'admin_bar_menu', 'ncsu_a11y_toolbar_link', 999 );
 
 // Do all the important stuff here
 // Scripts for running aXe and generating the annotated preview
@@ -72,13 +94,13 @@ function ncsu_a11y_helper__scripts_front( $hook ) {
                             'config'                => $config_str,
                         );
 
-    if ( is_preview() && get_query_var('ncsu_a11y') == 'true' ) {
+    if ( get_query_var('ncsu_a11y') === 'true' ) {
         // aXe: https://github.com/dequelabs/axe-core and https://www.deque.com/products/axe/
-        wp_register_script( 'axe-core', 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/2.6.1/axe.min.js', array(), null, true  );
+        wp_register_script( 'axe-core', 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/3.1.2/axe.min.js', array(), null, true  );
         wp_enqueue_script( 'axe-core' );
 
         // Script to run aXe tests and generate annotated preview
-        wp_register_script( 'a11y_tests', plugins_url('a11y_tests.js', __FILE__), array(), null, true );
+        wp_register_script( 'a11y_tests', plugins_url('a11y_tests.js', __FILE__), array( 'jquery' ), null, true );
         wp_enqueue_script( 'a11y_tests' );
 
         // Access plugin options in JS
