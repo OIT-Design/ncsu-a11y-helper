@@ -243,7 +243,7 @@
 
 							if(iframe_src.indexOf(recaptcha_src) != -1){
 
-					       		var test = 'ncsu_captcha';
+								var test = 'ncsu_captcha';
 					        	var test_msg = $.extend(true, {}, my_additional_tests[test]);
 
 						        $(this).addClass(test + '-' + i);
@@ -331,39 +331,17 @@
 		// console.log(violations);
 
 		// Add summary report to the end of the wrapper
-		var report = `<div class="a11y-dialog" aria-hidden="true" id="a11y-report" style="border: solid 1px red; margin: 2rem; padding: 2rem;">
-						<div class="a11y-dialog-overlay" tabindex="-1" data-a11y-dialog-hide></div>
-						<div class="a11y-dialog-content" aria-labelledby="dialogTitle" aria-describedby="a11y-desc-report" role="dialog">
-						<div role="document">
-							<button data-a11y-dialog-hide class="a11y-dialog-close" aria-label="Close this dialog window">&times;</button>
+		var report = `<div id="a11y-report" class="right">
 
-							<div id="a11y-desc-report" class="a11y-sr-text">Beginning of dialog window. It begins with a heading 1 called "Detected Accessibility Issues". Escape will cancel and close the window.</div>
+						<h2 id="a11y-report-title">Detected Accessibility Issues</h2>
+						
+						<ul class="a11y-report-content">
 
-								<h1 id="a11y-title-report">Detected Accessibility Issues</h1>
+						</ul>
 
-								<ul id="a11y-report-content">
-
-								</ul>
-
-								<div class="a11y-dialog-footer" role="footer">
-									<p><em>Accessibility testing powered by <a href="https://axe-core.org/">aXe-core, by Deque Systems</a>, with additional tests by <a href="https://design.oit.ncsu.edu/docs/a11y-helper">NC State University's OIT Design & Web Services team</a>.</em></p>
-								</div>
-							          
-							</div>
-						</div>
 					</div>`;
 
 		$(custom_options.wrapper).append(report);
-
-		// Add button in admin toolbar to open report modal
-		var generate_button = '<li id="wp-admin-bar-a11y-generate-report" class="a11y-report-generator"><button data-a11y-dialog-show="a11y-report" class="ab-item"><span class="dashicons dashicons-universal-access-alt"></span> Accessibility Report</button>		</li>';
-
-		$('#wp-admin-bar-root-default').append(generate_button);
-
-		// Add JS for modal dialog
-		var dialogEl_x = document.getElementById('a11y-report');
-		var mainEl_x = $(custom_options.wrapper);
-		var dialog_x = new window.A11yDialog(dialogEl_x, mainEl_x);
 
 		// For each violation...
 		$.each(violations, function( i, violation ) {
@@ -384,14 +362,6 @@
 			} else {
 				var impact = violation['impact'];
 			}
-
-			// Build annotation
-			var annotation = '<div class="a11y-annotation">' 
-								+ '<span class="a11y-indicator a11y-' + impact + '-indicator" aria-hidden="true"></span>'
-								+ '<strong class="a11y-impact">' + impact + ':</strong> '
-								+ '<span class="a11y-help">' + escapeHtml(help) + '</span>'
-								+ '<button class="a11y-more-button" data-a11y-dialog-show="a11y-more-' + i + '">Learn More<span class="a11y-sr-text"> about the issue: "' + escapeHtml(help) + '"</span></button>' 
-								+ '</div>';
 
 			// Build modal dialog
 			var my_dialog = `
@@ -440,41 +410,44 @@
 			`;
 
 			// Build report entry
-			var entry = `
-							<li class="a11y-report-entry">
-								<ul>
-									<li><strong>Issue:</strong> <a href="` + escapeHtml(helpurl) + `">` + escapeHtml(help) + `</a></li>
-									<li><strong>Code:</strong> <code>` + escapeHtml(html) + `</code></strong>
-									<li><strong>Impact:</strong> <span class="a11y-indicator a11y-` + impact + `-indicator" aria-hidden="true"></span><span class="a11y-impact">` + impact + `</span></li>
-									<li><strong>Description:</strong> ` + escapeHtml(description) + `</span></li>
-									<li><strong>Recommended Action:</strong> <span class="a11y-summary">` + escapeHtml(summary) + `</span></li>
-								</ul>
-							</li>
-						`;
+			var entry = '<li id="a11y-entry-' + i + '" class="a11y-report-entry">'
+							+ '<span class="a11y-report-entry-text">'
+								+ '<span class="a11y-indicator a11y-' + impact + '-indicator" aria-hidden="true"></span>'
+								+ '<strong class="a11y-impact">' + impact + ':</strong> '
+								+ '<span class="a11y-help">' + escapeHtml(help) + '</span>'
+							+ '</span>'
+							+ '<span class="a11y-report-entry-buttons">'
+								+ '<a class="a11y-jump-button" href="#a11y-issue-' + i + '" aria-label="Jump To Issue: ' + escapeHtml(help) + '">Jump To Issue</a>'
+								+ '<button class="a11y-more-button" data-a11y-dialog-show="a11y-more-' + i + '" aria-label="Learn More About: ' + escapeHtml(help) + '">Learn More</button>'
+							+ '</span>'
+						+ '</li>';
 
 			// Highlight the detected issue
 			$.each(violation['nodes'], function( j, instance ) {
 				var target = instance['target'][0];
 
 				$(target).wrap(function() {
- 						return "<span class='a11y-issue a11y-" + impact + " a11y-" + id + "'></span>";
+ 						return '<span id="a11y-issue-' + i + '" class="a11y-issue a11y-' + impact + ' a11y-' + id + '"></span>';
 					});
 
 			});
 
-			var screen_reader_issue_intro = "<span class='a11y-sr-text'>The following content has a possible accessibility issue. After the content, a description of the detected error will be read.</span>";
+			var screen_reader_issue_intro = "<span class='a11y-sr-text'>The following contains a possible accessibility issue.</span>";
 
 			// Tell screen reader users that they've reached an issue
 			$(screen_reader_issue_intro).prependTo( $('.a11y-' + id) );
 
-			// Add annotation to the detected issue
-			$(annotation).appendTo( $('.a11y-' + id) );
+			var skip_to_a11y_issue = '<a class="a11y-shortcut" href="#a11y-entry-' + i + '">Skip to accessibility issue information</a>'
+			// Add link to skip back
+			$(skip_to_a11y_issue).appendTo( $('.a11y-' + id) );
 
 			// Add modal dialog with issue details
 			$(custom_options.wrapper).append(my_dialog);
 
 			// Report Entries
 			$('#a11y-report-content').append(entry);
+
+			$(entry).appendTo( $('.a11y-report-content') );
 
 			// Add JS for modal dialog
 			var dialogEl = document.getElementById('a11y-more-' + i);
@@ -484,6 +457,8 @@
 		});
 
 	}
+
+	
 
 })( jQuery );
 
