@@ -328,8 +328,6 @@
 		var violations = $.merge(results['violations'], results['incomplete']);
 		violations = $.merge(violations, additional_test_violations);
 
-		// console.log(violations);
-
 		// Add summary report to the end of the wrapper
 		var report = `<div id="a11y-report" class="right">
 
@@ -344,115 +342,121 @@
 		$(custom_options.wrapper).append(report);
 
 		// For each violation...
-		$.each(violations, function( i, violation ) {
+		$.each(violations, function( j, violation ) {
 
-			var id = violation['id'];
+			var nodes = violation['nodes'];
 
-			var description = ( customize_tests[id] !== undefined && customize_tests[id]['description'] !== undefined ) ? customize_tests[id]['description'] : violation['description'];
-			var help = ( customize_tests[id] !== undefined && customize_tests[id]['help'] !== undefined ) ? customize_tests[id]['help'] : violation['help'];
-			var helpurl = ( customize_tests[id] !== undefined && customize_tests[id]['helpUrl'] !== undefined ) ? customize_tests[id]['helpUrl'] : violation['helpUrl'];
-			var summary = ( customize_tests[id] !== undefined && customize_tests[id]['failureSummary'] !== undefined ) ? customize_tests[id]['failureSummary'] : violation['nodes'][0]['failureSummary'];
+			// For each instance of each violation...
+			$.each(nodes, function( i, node ) {
 
-			var html = violation['nodes'][0]['html'];
-			var tags = violation['tags'];
+				var id = violation['id'];
 
-			// Make all "null" impacts "info" -- Not 100% sure about this choice, but don't want people ignoring potential issues labeled "null"
-			if ( !violation['impact'] ) {
-				var impact = 'info';
-			} else {
-				var impact = violation['impact'];
-			}
+				var description = ( customize_tests[id] !== undefined && customize_tests[id]['description'] !== undefined ) ? customize_tests[id]['description'] : violation['description'];
+				var help = ( customize_tests[id] !== undefined && customize_tests[id]['help'] !== undefined ) ? customize_tests[id]['help'] : violation['help'];
+				var helpurl = ( customize_tests[id] !== undefined && customize_tests[id]['helpUrl'] !== undefined ) ? customize_tests[id]['helpUrl'] : violation['helpUrl'];
+				var summary = ( customize_tests[id] !== undefined && customize_tests[id]['failureSummary'] !== undefined ) ? customize_tests[id]['failureSummary'] : node['failureSummary'];
+			
+				var html = node['html'];
+				var tags = violation['tags'];
 
-			// Build modal dialog
-			var my_dialog = `
-							<div class="a11y-dialog" aria-hidden="true" id="a11y-more-` + i + `">
-							      <div class="a11y-dialog-overlay" tabindex="-1" data-a11y-dialog-hide></div>
-							      <div class="a11y-dialog-content" aria-labelledby="dialogTitle" aria-describedby="a11y-desc-` + i + `" role="dialog">
-							        <div role="document">
-							          <button data-a11y-dialog-hide class="a11y-dialog-close" aria-label="Close this dialog window">&times;</button>
+				// Make all "null" impacts "info" -- Not 100% sure about this choice, but don't want people ignoring potential issues labeled "null"
+				if ( !violation['impact'] ) {
+					var impact = 'info';
+				} else {
+					var impact = violation['impact'];
+				}
 
-								      <div id="a11y-desc-` + i + `" class="a11y-sr-text">Beginning of dialog window. It begins with a heading 1 called "` + impact + `:</strong> ` + escapeHtml(help) + `". Escape will cancel and close the window.</div>
+				// Build modal dialog
+				var my_dialog = `
+								<div class="a11y-dialog" aria-hidden="true" id="a11y-more-` + i + `">
+									<div class="a11y-dialog-overlay" tabindex="-1" data-a11y-dialog-hide></div>
+									<div class="a11y-dialog-content" aria-labelledby="dialogTitle" aria-describedby="a11y-desc-` + i + `" role="dialog">
+										<div role="document">
+										<button data-a11y-dialog-hide class="a11y-dialog-close" aria-label="Close this dialog window">&times;</button>
 
-								      <h1 id="a11y-title-` + i + `"><span class="a11y-indicator a11y-` + impact + `-indicator" aria-hidden="true"></span><strong class="a11y-impact">` + impact + `:</strong> ` + escapeHtml(help) + `</h1>
+										<div id="a11y-desc-` + i + `" class="a11y-sr-text">Beginning of dialog window. It begins with a heading 1 called "` + impact + `:</strong> ` + escapeHtml(help) + `". Escape will cancel and close the window.</div>
 
-								      <div class="a11y-test-content">
+										<h1 id="a11y-title-` + i + `"><span class="a11y-indicator a11y-` + impact + `-indicator" aria-hidden="true"></span><strong class="a11y-impact">` + impact + `:</strong> ` + escapeHtml(help) + `</h1>
 
-									      <div class="a11y-test-info">
+										<div class="a11y-test-content">
 
-									          <h2>Why We Test For This</h2>
-									          <p>` + escapeHtml(description) + `</p>
+											<div class="a11y-test-info">
 
-									          <p class="a11y-external-resource"><a href="` + escapeHtml(helpurl) + `">Learn more about this issue</a></p>
+												<h2>Why We Test For This</h2>
+												<p>` + escapeHtml(description) + `</p>
 
-									          <h2>Recommended Action</h2>
-									          <p class="a11y-summary">` + escapeHtml(summary) + `</p>
+												<p class="a11y-external-resource"><a href="` + escapeHtml(helpurl) + `">Learn more about this issue</a></p>
 
-									      </div>
+												<h2>Recommended Action</h2>
+												<p class="a11y-summary">` + escapeHtml(summary) + `</p>
 
-								          <div class="a11y-test-html">
+											</div>
 
-								          	<h2>Code</h2>
-								          	<div class="a11y-html-code">
-								          		<code>` + escapeHtml(html) + `</code>
-								          	</div>
+											<div class="a11y-test-html">
 
-								          </div>
+												<h2>Code</h2>
+												<div class="a11y-html-code">
+													<code>` + escapeHtml(html) + `</code>
+												</div>
 
-								      </div>
+											</div>
 
-								      <div class="a11y-dialog-footer" role="footer">
-								      	<p><em>Accessibility testing powered by <a href="https://axe-core.org/">aXe-core, by Deque Systems</a>, with additional tests by <a href="https://design.oit.ncsu.edu/docs/a11y-helper">NC State University's OIT Design & Web Services team</a>.</em></p>
-								      </div>
-							          
-							        </div>
-							      </div>
-							    </div>
-			`;
+										</div>
 
-			// Build report entry
-			var entry = '<li id="a11y-entry-' + i + '" class="a11y-report-entry">'
-							+ '<span class="a11y-report-entry-text">'
-								+ '<span class="a11y-indicator a11y-' + impact + '-indicator" aria-hidden="true"></span>'
-								+ '<strong class="a11y-impact">' + impact + ':</strong> '
-								+ '<span class="a11y-help">' + escapeHtml(help) + '</span>'
-							+ '</span>'
-							+ '<span class="a11y-report-entry-buttons">'
-								+ '<a class="a11y-jump-button" href="#a11y-issue-' + i + '" aria-label="Jump To Issue: ' + escapeHtml(help) + '">Jump To Issue</a>'
-								+ '<button class="a11y-more-button" data-a11y-dialog-show="a11y-more-' + i + '" aria-label="Learn More About: ' + escapeHtml(help) + '">Learn More</button>'
-							+ '</span>'
-						+ '</li>';
+										<div class="a11y-dialog-footer" role="footer">
+											<p><em>Accessibility testing powered by <a href="https://axe-core.org/">aXe-core, by Deque Systems</a>, with additional tests by <a href="https://design.oit.ncsu.edu/docs/a11y-helper">NC State University's OIT Design & Web Services team</a>.</em></p>
+										</div>
+										
+										</div>
+									</div>
+									</div>
+				`;
 
-			// Highlight the detected issue
-			$.each(violation['nodes'], function( j, instance ) {
-				var target = instance['target'][0];
+				// Build report entry
+				var entry = '<li id="a11y-entry-' + i + '" class="a11y-report-entry">'
+								+ '<span class="a11y-report-entry-text">'
+									+ '<span class="a11y-indicator a11y-' + impact + '-indicator" aria-hidden="true"></span>'
+									+ '<strong class="a11y-impact">' + impact + ':</strong> '
+									+ '<span class="a11y-help">' + escapeHtml(help) + '</span>'
+								+ '</span>'
+								+ '<span class="a11y-report-entry-buttons">'
+									+ '<a class="a11y-jump-button" href="#a11y-issue-' + i + '" aria-label="Jump To Issue: ' + escapeHtml(help) + '">Jump To Issue</a>'
+									+ '<button class="a11y-more-button" data-a11y-dialog-show="a11y-more-' + i + '" aria-label="Learn More About: ' + escapeHtml(help) + '">Learn More</button>'
+								+ '</span>'
+							+ '</li>';
+
+				// Highlight the detected issue
+
+				var target = node['target'][0];
 
 				$(target).wrap(function() {
- 						return '<span id="a11y-issue-' + i + '" class="a11y-issue a11y-' + impact + ' a11y-' + id + '"></span>';
+						return '<span id="a11y-issue-' + i + '" class="a11y-issue a11y-' + impact + ' a11y-' + id + '"></span>';
 					});
 
+
+				var screen_reader_issue_intro = "<span class='a11y-sr-text'>The following contains a possible accessibility issue.</span>";
+
+				// Tell screen reader users that they've reached an issue
+				$(screen_reader_issue_intro).prependTo( $('.a11y-' + id) );
+
+				var skip_to_a11y_issue = '<a class="a11y-shortcut" href="#a11y-entry-' + i + '">Skip to accessibility issue information</a>'
+				// Add link to skip back
+				$(skip_to_a11y_issue).appendTo( $('.a11y-' + id) );
+
+				// Add modal dialog with issue details
+				$(custom_options.wrapper).append(my_dialog);
+
+				// Report Entries
+				$('#a11y-report-content').append(entry);
+
+				$(entry).appendTo( $('.a11y-report-content') );
+
+				// Add JS for modal dialog
+				var dialogEl = document.getElementById('a11y-more-' + i);
+				var mainEl = $(custom_options.wrapper);
+				var dialog = new window.A11yDialog(dialogEl, mainEl);
+			
 			});
-
-			var screen_reader_issue_intro = "<span class='a11y-sr-text'>The following contains a possible accessibility issue.</span>";
-
-			// Tell screen reader users that they've reached an issue
-			$(screen_reader_issue_intro).prependTo( $('.a11y-' + id) );
-
-			var skip_to_a11y_issue = '<a class="a11y-shortcut" href="#a11y-entry-' + i + '">Skip to accessibility issue information</a>'
-			// Add link to skip back
-			$(skip_to_a11y_issue).appendTo( $('.a11y-' + id) );
-
-			// Add modal dialog with issue details
-			$(custom_options.wrapper).append(my_dialog);
-
-			// Report Entries
-			$('#a11y-report-content').append(entry);
-
-			$(entry).appendTo( $('.a11y-report-content') );
-
-			// Add JS for modal dialog
-			var dialogEl = document.getElementById('a11y-more-' + i);
-			var mainEl = $(custom_options.wrapper);
-			var dialog = new window.A11yDialog(dialogEl, mainEl);
 
 		});
 
