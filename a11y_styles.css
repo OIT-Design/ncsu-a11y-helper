@@ -153,8 +153,8 @@ a.a11y-shortcut:focus, a.a11y-shortcut:active {
 }
 
 .a11y-report-content {
-	padding: 0;
-	max-height: 90%;
+	padding: 1em;
+	max-height: 80%;
 	overflow-y: scroll;
 }
 
